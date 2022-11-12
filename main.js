@@ -1,129 +1,86 @@
+const arrayProductos = [];
+
+const producto1 = new Producto(1, 'Auriculares HyperX :', 11600);
+const producto2 = new Producto(2, 'Mouse ASUS :', 25000);
+const producto3 = new Producto(3, 'Geforce GTX 1650 :', 90900);
+const producto4 = new Producto(4, 'Intel Core I3 9100f :', 94799);
+const producto5 = new Producto(5, 'AMD Ryzen 3 3200G :', 44733);
+const producto6 = new Producto(6, 'Geforce RTX 3090 :', 431193);
+
+arrayProductos.push(producto1, producto2, producto3,producto4,producto5,producto6);
+
+const ordenarMenorMayor = () => {
+    arrayProductos.sort((a, b) => a.precio - b.precio);
+    mostrarListaOrdenada();
+};
+
+const ordenarMayorMenor = () => {
+    arrayProductos.sort((a, b) => b.precio - a.precio);
+    mostrarListaOrdenada();
+};
+
+const mostrarListaOrdenada = () => {
+    let array = [];
+    arrayProductos.forEach(producto => array.push(producto.nombre+' $'+producto.precio));
+    alert('Lista de precios:'+'\n'+array.join('\n'));
+};
+
+
 function comprarProductos() {
-    let producto = '';
-    let precio = 0;
-    let cantidad = 0;
-    let totalCompra = 0;
-    let cantidadTotal = 0;
+    let productoNombre = '';
+    let productoCantidad = 0;
+    let total = 0;
     let seguirComprando = false;
 
     do {
-        producto = prompt('¿Queres realizar la compra de la placa de video Nvidia, el mouse ASUS o los auriculares HyperX?', 'Ej: placa de video NVIDIA');
-        cantidad = parseInt(prompt('¿Cuantas unidades queres comprar?'));
+        productoNombre = prompt('¿Queres abastecer tu setup con algunos de nuestros productos gamers?', 'Ej: Geforce GTX 1650');
+        productoCantidad = parseInt(prompt('¿Cuantos queres comprar?'));
 
-        let cantidadValidada = validarCantidad(cantidad);
+        const producto = arrayProductos.find(producto => producto.nombre === productoNombre);
 
-        switch (producto) {
-            case 'placa de video NVIDIA':
-                precio = 50000;
-                break;
-            case 'mouse ASUS':
-                precio = 5000;
-                break;
-            case 'auriculares HyperX':
-                precio = 11600;
-                break;
-            default:
-                alert('Alguno de los datos ingresados no es correcto.');
-                precio = 0;
-                cantidad = 0;
-                break;
+        if (producto) {
+            total += producto.precio * productoCantidad;
+        } else {
+            alert('Lo sentimos, el producto no se encuentra en stock.');
         }
 
-        totalCompra += precio * cantidadValidada;
-        seguirComprando = confirm('¿Queres agregar algún otro producto gamer?');
+        seguirComprando = confirm('¿Queres agregar otro producto gamer al carrito?');
 
     } while (seguirComprando)
 
-    const totalConDescuento = aplicarDescuento(totalCompra);
-    const totalConEnvio = calcularEnvio(totalConDescuento);
-
-    return totalConEnvio;
-}
-
-function validarCantidad(cantidad) {
-    while(Number.isNaN(cantidad) || cantidad === 0) {
-        if (cantidad !== 0) {
-            alert('Debes ingresar un número.')
-        } else {
-            alert('Tu carrito de compras esta vacio.')
-        }
-        cantidad = parseInt(prompt('¿Cuantas unidadas queres comprar?'));
-    }
-
-    return cantidad;
+    aplicarDescuento(total);
 }
 
 function aplicarDescuento(totalCompra) {
-    let totalConDescuento = 0;
-
-    if (totalCompra >= 5000) {
-        totalConDescuento = totalCompra * 0.80;
-        return totalConDescuento;
-    } else {
-        return totalCompra;
+    if (totalCompra >= 25000) {
+        totalCompra = totalCompra * 0.80;
+        alert('¡Sorpresa! Obtuviste un 20% de descuento con tu compra.');
     }
+    calcularEnvio(totalCompra)
 }
 
 function calcularEnvio(totalCompra) {
-    let tieneEnvioADomicilio = false;
+    let tieneEnvioADomicilio = confirm('Contamos con envió a domicilio. ¿Estás interesado/a?');
 
-    tieneEnvioADomicilio = confirm('Contamos con envio a domicilio. ¿Estas interesado?');
-
-    if (tieneEnvioADomicilio && totalCompra >= 10000) {
-        alert('Contas con el envio gratis. El total de tu compra es $'+totalCompra);
-    } else if (tieneEnvioADomicilio && totalCompra < 10000 && totalCompra !== 0) {
+    if (tieneEnvioADomicilio && totalCompra >= 15000) {
+        alert('Tenes envio gratis. El total de la compra es: '+totalCompra);
+    } else if (tieneEnvioADomicilio && totalCompra < 2000 && totalCompra !== 0) {
         totalCompra += 700;
-        alert('El precio del envio es de $700. El total de tu compra es $'+totalCompra);
+        alert('El envío cuesta $700. El total de la compra es: '+totalCompra);
     } else {
-        alert('El total de tu compra es $'+totalCompra);
+        alert('El total de tu compra es: '+totalCompra);
+    }
+};
+
+function comprar() {
+    const quieroOrdenar =confirm('¿Querés ordenar la lista de productos del más barato al mas caro?');
+    if (quieroOrdenar) {
+        ordenarMenorMayor();
+    } else {
+        ordenarMayorMenor();
     }
 
-    return totalCompra;
-}
+    comprarProductos();
+};
 
-function calcularCantidadDeCuotas() {
-    let cuotas = 0;
-    let tieneCuotas = false;
-
-    tieneCuotas = confirm('¿Queres abonar el total de la compra en cuotas?');
-
-    if (tieneCuotas) {
-        cuotas = parseInt(prompt('¿En cuántas cuotas queres abonar?'));
-        if (cuotas === 0) {
-            cuotas = 1;
-        } else if (Number.isNaN(cuotas)) {
-            calcularCantidadDeCuotas();
-        }
-    } else {
-        cuotas = 1;
-    }
-
-    return cuotas;
-}
-
-function calcularIntereses(cuotas) {
-    let tasa = 12.3;
-    let sinIntereses = 0;
-    let tasaTotal = 0;
-    let interesesTotales = 0;
-
-    if (cuotas === 1) {
-        return sinIntereses;
-    } else {
-        tasaTotal = tasa + cuotas * 0.2;
-        interesesTotales = tasaTotal * cuotas;
-        return interesesTotales;
-    }
-}
-
-function calcularTotalAPagar(totalCompra, cuotas, intereses) {
-    totalCompra = totalCompra + intereses;
-    let valorCuota = totalCompra / cuotas;
-    alert('El total de tu compra es de $'+totalCompra+' en '+cuotas+' cuotas de $'+valorCuota);
-}
-
-const totalCompra = comprarProductos();
-const cuotas = calcularCantidadDeCuotas();
-const intereses = calcularIntereses(cuotas);
-
-calcularTotalAPagar(totalCompra, cuotas, intereses);
+comprar();
