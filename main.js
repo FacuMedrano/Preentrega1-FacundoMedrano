@@ -1,11 +1,11 @@
 const arrayProductos = [];
 
-const producto1 = new Producto(1, 'Auriculares HyperX :', 11600);
+const producto1 = new Producto(1, 'Auriculares HyperX', 11600);
 const producto2 = new Producto(2, 'Mouse ASUS :', 25000);
-const producto3 = new Producto(3, 'Geforce GTX 1650 :', 90900);
-const producto4 = new Producto(4, 'Intel Core I3 9100f :', 94799);
-const producto5 = new Producto(5, 'AMD Ryzen 3 3200G :', 44733);
-const producto6 = new Producto(6, 'Geforce RTX 3090 :', 431193);
+const producto3 = new Producto(3, 'Geforce GTX 1650', 90900);
+const producto4 = new Producto(4, 'Intel Core I3 9100f', 94799);
+const producto5 = new Producto(5, 'AMD Ryzen 3 3200G', 44733);
+const producto6 = new Producto(6, 'Geforce RTX 3090', 431193);
 
 arrayProductos.push(producto1, producto2, producto3,producto4,producto5,producto6);
 
